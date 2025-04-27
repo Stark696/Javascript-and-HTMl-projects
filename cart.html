@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrendyCart - Shop in Style</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f2f5;
+      color: #333;
+      background-image: url(ecommerce.jpg);
+      background-size: cover;
+      background-position: center;
+    }
+
+    nav {
+      background: #1abc9c;
+      padding: 1rem;
+      color: white;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav a {
+      color: white;
+      margin: 0 1.5rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      display: none;
+      padding: 2rem;
+    }
+    .active {
+      display: block;
+    }
+
+    .hero {
+      text-align: center;
+      /* background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://source.unsplash.com/1600x400/?shopping') no-repeat center center/cover; */
+      color: white;
+      padding: 6rem 2rem;
+
+    }
+    .hero img{
+      width:100px;
+      border-radius: 50%;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      color: yellow;
+    }
+    .hero p {
+      font-size: 1.5rem;
+      color: rgb(142, 139, 231);
+    }
+
+    .product, .cart-item {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .product img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    button {
+      background: #3498db;
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    button:hover {
+      background: #2c3e50;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .footer {
+    background-color: #1a1a2e;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+user agent stylesheet
+footer {
+    display: block;
+    unicode-bidi: isolate;
+}
+  </style>
+</head>
+<body>
+  <nav>
+    
+    <a href="#" onclick="showPage('interface')">Home</a>
+    <a href="#" onclick="showPage('products')">Products</a>
+    <a href="#" onclick="showPage('cart')">Cart</a>
+    <a href="#" onclick="showPage('payment')">Payment</a>
+  </nav>
+
+  <!-- Home Page -->
+  <div id="interface" class="page active">
+    <div class="hero">
+      <img src="https://marketplace.canva.com/EAGQ1aYlOWs/1/0/1600w/canva-blue-colorful-illustrative-e-commerce-online-shop-logo-bHiX_0QpJxE.jpg" alt="">
+      <h1>Welcome to TrendyCart</h1>
+      <p>Your one-stop shop for all stylish things at Reasonable prices!</p>
+    </div>
+  </div>
+
+  <!-- Products Page -->
+  <div id="products" class="page">
+    <h1>Our Products</h1>
+    <div class="product">
+      <img src="watches.jpg" alt="Stylish Watch">
+      <h2>Stylish Watch</h2>
+      <p>$50</p>
+      <button onclick="addToCart('Stylish Watch', 50)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="leather bag.jpg" alt="Leather Bag">
+      <h2>Leather Bag</h2>
+      <p>$80</p>
+      <button onclick="addToCart('Leather Bag', 80)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="tshirts.jpg" alt="T.Shirts">
+      <h2>T-Shirts</h2>
+      <p>$40</p>
+      <button onclick="addToCart('T-Shirts', 40)">Add to Cart</button>
+    </div>
+  </div>
+
+  <!-- Cart Page -->
+  <div id="cart" class="page">
+    <h1>Your Cart</h1>
+    <div id="cart-items"></div>
+    <p><strong>Total: $<span id="total">0</span></strong></p>
+  </div>
+
+  <!-- Payment Page -->
+  <div id="payment" class="page">
+    <h1>Payment Details</h1>
+    <form onsubmit="event.preventDefault(); alert('Your order is been placed !');">
+      <input type="text" placeholder="Card Number"><br>
+      <input type="text" placeholder="Expiry Date"><br>
+      <input type="text" placeholder="CVV"><br>
+      <input type="text" placeholder="UPI" required><br>
+      <button type="submit">Pay Now</button>
+    </form>
+  </div>
+
+  <script>
+    const cart = [];
+
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if (id === 'cart') displayCart();
+    }
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      alert(`${name} added to cart.`);
+    }
+
+    function displayCart() {
+      const cartItems = document.getElementById('cart-items');
+      const total = document.getElementById('total');
+      cartItems.innerHTML = '';
+      let sum = 0;
+      cart.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.textContent = `${item.name} - $${item.price}`;
+        cartItems.appendChild(div);
+        sum += item.price;
+      });
+      total.textContent = sum;
+    }
+  </script>
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="footer-content">
+          <p>&copy; 2025 Trendy cart | gauravbordia2006@gmail.com</p>
+          <div class="social-media">
+              <a target="_blank" href="https://www.instagram.com/__gaurav_jain._?igsh=a2M1YTlteGhveDIz">Instagram</a>
+              <a target="_blank" href="https://www.linkedin.com/in/gaurav-jain-34bb06307?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Linkedin</a>
+          </div>
+      </div>
+  </footer>
+</body>
+</html>
